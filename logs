@@ -1,0 +1,43 @@
+hdfs dfs -mkdir /logs
+hdfs dfs -put /home/cloudera/Desktop/2008-01.txt 
+hdfs dfs -put /home/cloudera/Desktop/2008-02.txt 
+hdfs dfs -put /home/cloudera/Desktop/2008-03.txt 
+hdfs dfs -put /home/cloudera/Desktop/2008-04.txt 
+hdfs dfs -put /home/cloudera/Desktop/2008-05.txt 
+hdfs dfs -put /home/cloudera/Desktop/2008-06.txt
+
+hive
+
+CREATE TABLE logs (log_date STRING, log_time STRING, c_ip STRING,cs_username STRING, s_ip STRING,  s_port STRING,cs_method STRING, cs_uri_stem STRING, cs_uri_query STRING,sc_status STRING, sc_bytes INT, cs_bytes INT, time_taken INT, cs_user_agent STRING, cs_referrer STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ';
+
+LOAD DATA INPATH '/logs' INTO TABLE logs;  
+SELECT *FROM logs LIMIT 100;
+SELECT count(*) FROM logs;
+
+CREATE EXTERNAL TABLE cleanlogs (log_date DATE, log_time STRING, c_ip STRING, cs_username STRING, s_ip STRING, s_port STRING, cs_method STRING, cs_uri_stem STRING, cs_uri_query STRING, sc_status STRING, sc_bytes INT, cs_bytes INT, time_taken INT, cs_user_agent STRING, cs_referrer STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE LOCATION '/logs/cleanlogs';
+
+INSERT INTO TABLE cleanlogs SELECT * FROM logs WHERE SUBSTR(log_date, 1, 1) <> '#' ; 
+
+CREATE VIEW DailySummary AS SELECT log_date, COUNT(*) AS requests, SUM(cs_bytes) AS inbound_bytes, SUM(sc_bytes) AS outbound_bytes FROM cleanlogs GROUP BY log_date;
+
+SELECT * FROM DailySummary ORDER BY log_date; 
+
+CREATE EXTERNAL TABLE partitioned (log_day int, log_time STRING, c_ip STRING, cs_username STRING, s_ip STRING, s_port STRING, cs_method STRING, cs_uri_stem STRING, cs_uri_query STRING, sc_status STRING, sc_bytes INT, cs_bytes INT, time_taken INT, cs_user_agent STRING, cs_referrer STRING) PARTITIONED BY (log_year int, log_month int) ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS TEXTFILE LOCATION '/logs/partitionedlog';
+
+SET hive.exec.dynamic.partition.mode=nonstrict;  
+SET hive.exec.dynamic.partition = true;
+
+INSERT INTO TABLE partitioned PARTITION(log_year, log_month) SELECT DAY(log_date), log_time, c_ip, cs_username, s_ip, s_port, cs_method, cs_uri_stem, cs_uri_query, sc_status, sc_bytes, cs_bytes, time_taken, cs_user_agent, cs_referrer, YEAR(log_date), MONTH(log_date) FROM logs WHERE SUBSTR(log_date, 1, 1) <> '#' ;
+
+
+SELECT log_day, count(*) AS page_hits FROM partitioned WHERE log_year=2008 AND log_month=6 GROUP BY log_day;
+
+
+hdfs dfs -ls /logs
+
+
+
+
+
+
+
