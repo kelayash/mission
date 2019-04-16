@@ -1,0 +1,54 @@
+1. Download Big-data-3.zip from github
+https://github.com/words-sdsc/coursera
+2. extract Big-data-3.zip 
+3. run setup.sh by ./setup.sh in Big-data-3 folder
+4.cd mongodb
+5.mongodb/bin/mongod --dbpath db
+terminal 2
+6.OPen new terminal go to cd /Downloads/big-data-3/mongodb
+	And 	mongodb/bin/mongo
+7.show dbs 
+8.use sample
+9.use test
+10.To the above MongoDB script add following command and test
+
+>use test                             #create test database
+
+>show dbs
+
+>db.x.insert({name: "sarada", id: 1, year: 2014})
+
+>show dbs
+
+>db.x.find()
+
+>db.x.insert({name: "siba", id: 2, year: 2013})
+
+>db.x.find()
+
+>db.x.find({},{_id: 0})
+
+11.use sample
+12.db.user.count()
+13.db.users.find()
+14.db.users.findOne()
+15.db.users.findOne({},{_id:0})
+16.db.users.findOne({},{user_name:1,_id:0})
+17.db.users.distinct("user_name")
+18.db.users.find({user_name:"ActionSportsJax"})
+19.db.users.find({user_name:"ActionSportsJax"}).pretty()
+20.db.users.find({user_name:"ActionSportsJax"},{tweet_ID:1})
+21.db.users.find({user_name:"ActionSportsJax"},{tweet_ID:1,_id:0})
+22.db.users.find({tweet_text:/FIFA/})
+23.db.users.find({tweet_text:/FIFA/}).count()
+24.db.users.createIndex({"tweet_text":"text"})#create index
+25.db.users.find({$text:{$search:"FIFA"}}).count()
+26.db.users.find({$text:{$search:"FIFA -Texas"}}).count()
+27.db.users.find({tweet_mentioned_count:{$gt :6}})
+28.db.users.find({tweet_mentioned_count:{$gt :6}}).count()
+29.db.users.find({$where :"this.tweet_mentioned_count>this.tweet_followers_count"}).count()
+30.db.users.find({$and :[{tweet_text:/FIFA/},{tweet_mentioned_count:{$gt:4}}]}).count()
+31.db.users.find({$and :[{tweet_text:/FIFA/},{tweet_mentioned_count:{$gt:4}}]},{id:1})
+32.db.users.find({$and : [{tweet_text: /FIFA/},{'user.Location': "Nigeria"}]})
+33.db.users.find({$and : [{tweet_text: /FIFA/},{'user.Location': "Nigeria"}]}).count()
+34.
