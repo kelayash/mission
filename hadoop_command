@@ -1,0 +1,114 @@
+#remove file 
+
+hadoop fs -rm filename
+	ex:hadoop fs -rm word.txt
+
+#to put files into hdfs
+
+hadoop fs -put filename
+	ex:hadoop fs -put word.txt
+
+#To  Remove Directory
+
+hadoop fs -rmdir directroyname(it is directory)
+	ex:hadoop fs -rmdir MtechDS
+
+#To make directory
+
+hadoop fs -mkdir directroyname(it is directory)
+	ex:hadoop fs -mkdir Mtech
+
+#To run jar file(Examples.jar)
+
+hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples.jar
+
+#word count
+
+hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples.jar wordcount word1.txt(input file) wordcount(output file)
+
+#To View Results
+
+hadoop fs -ls wordcount(the output file)
+(two files will there)
+hadoop fs -get wordcount/part-r-00000 myresults
+more myresults
+
+#word median
+
+hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples.jar wordmedian word1.txt(input file) wordcount(output file)
+
+#To Unzip 
+
+unzip -o big-data-2.zip
+
+#Go to CSV
+
+cd csv
+ls -l
+more census.csv
+type q to quit
+
+#to Download Office
+
+(inside my-big-data2)
+./setup.sh
+
+#Go to Image
+
+cd image
+ls -l
+(3 files)
+
+#to view Image 
+
+eog Australia.jpg
+eog Australia.jpg &
+
+#To View Dimensions
+
+./dimensions.py Australia.jpg
+
+#to view Pixel at specific point(RGB)
+
+./pixel.py Australia.jpg 200 20000 
+or
+./pixel.py Australia.jpg 0 0
+
+
+#to viewcode
+cat pixel.py
+
+#Go to Json
+./json_schema.py twitter.json
+./print_json.py
+
+# to View specific tweet 
+./print_json 
+ENter filename:twitter.json
+Tweetnumber:67
+Enter path: text
+
+#Go to sensor
+ls -l
+#to plot data
+./plot-data.py wx-data.txt Th
+
+# Go to vector
+cd vector
+ls -l
+cd data 
+ls -l
+more csv1.csv
+press q
+cd ..
+#to print and run Query
+./LuceneQuery data
+Enter queryName:delegates
+
+#to print tfidf and run
+./LuceneTHIDF.sh data
+Enter term to calculate TF-IDF(q=quit):delegates
+
+
+
+
